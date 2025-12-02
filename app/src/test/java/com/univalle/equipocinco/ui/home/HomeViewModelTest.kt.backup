@@ -1,0 +1,106 @@
+package com.univalle.equipocinco.ui.home
+
+
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.univalle.equipocinco.data.remote.dto.ProductDto
+import com.univalle.equipocinco.data.remote.firebase.FirebaseAuthService
+import com.univalle.equipocinco.data.repository.ProductRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.*
+import org.junit.After
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+import org.junit.Assert.*
+import org.mockito.Mock
+import org.mockito.Mockito.*
+import org.mockito.MockitoAnnotations
+import org.mockito.kotlin.whenever
+
+@ExperimentalCoroutinesApi
+class HomeViewModelTest {
+
+    @get:Rule
+    val instantExecutorRule = InstantTaskExecutorRule()
+
+    private val testDispatcher = StandardTestDispatcher()
+
+    @Mock
+    private lateinit var mockRepository: ProductRepository
+
+    @Mock
+    private lateinit var mockAuthService: FirebaseAuthService
+
+    private lateinit var viewModel: HomeViewModel
+
+    @Before
+    fun setup() {
+        MockitoAnnotations.openMocks(this)
+        Dispatchers.setMain(testDispatcher)
+    }
+
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain()
+    }
+
+    @Test
+    fun `loadProducts con usuario autenticado debe cargar productos`() = runTest {
+        // Given
+        val userId = "test-user-123"
+        val testProducts = listOf(
+            ProductDto("1", 100, "Producto 1", 50.0, 10),
+            ProductDto("2", 200, "Producto 2", 100.0, 5)
+        )
+        whenever(mockAuthService.getUserId()).thenReturn(userId)
+        whenever(mockRepository.getAllProducts()).thenReturn(flowOf(testProducts))
+
+        // When
+        viewModel = HomeViewModel(mockRepository, mockAuthService)
+        viewModel.loadProducts()
+        testScheduler.advanceUntilIdle()
+
+        // Then
+        assertEquals(testProducts, viewModel.products.value)
+        assertFalse(viewModel.isLoading.value)
+        verify(mockRepository).getAllProducts()
+    }
+
+    @Test
+    fun `loadProducts sin usuario autenticado no debe cargar productos`() = runTest {
+        // Given
+        whenever(mockAuthService.getUserId()).thenReturn(null)
+
+        // When
+        viewModel = HomeViewModel(mockRepository, mockAuthService)
+        viewModel.loadProducts()
+        testScheduler.advanceUntilIdle()
+
+        // Then
+        assertTrue(viewModel.products.value.isEmpty())
+        assertFalse(viewModel.isLoading.value)
+        verify(mockRepository, never()).getAllProducts()
+    }
+
+    @Test
+    fun `reset debe limpiar productos y loading`() = runTest {
+        // Given
+        val userId = "test-user-123"
+        whenever(mockAuthService.getUserId()).thenReturn(userId)
+        whenever(mockRepository.getAllProducts())
+            .thenReturn(flowOf(listOf(ProductDto("1", 100, "Test", 50.0, 10))))
+
+        viewModel = HomeViewModel(mockRepository, mockAuthService)
+        viewModel.loadProducts()
+        testScheduler.advanceUntilIdle()
+
+        // When
+        viewModel.reset()
+
+        // Then
+        assertTrue(viewModel.products.value.isEmpty())
+        assertFalse(viewModel.isLoading.value)
+    }
+}

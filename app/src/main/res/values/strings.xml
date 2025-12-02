@@ -38,4 +38,5 @@
     <!-- Widget -->
     <string name="widget_question">¿Cuánto tengo de\ninventario?</string>
     <string name="widget_manage">Gestionar inventario</string>
+
 </resources>
