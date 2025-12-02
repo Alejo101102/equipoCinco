@@ -1,3 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">equipocinco</string>
+    <string name="app_name">InventoryWidget</string>
+    <string name="widget_description">Widget para gestionar inventario</string>
+
+    <!-- Login -->
+    <string name="login_title">Inventory</string>
+    <string name="biometric_title">Autenticación con Biometría</string>
+    <string name="biometric_subtitle">Ingrese su huella digital</string>
+
+    <!-- Home -->
+    <string name="home_title">Inventario</string>
+    <string name="empty_products">No hay productos</string>
+
+    <!-- Add Product -->
+    <string name="add_product_title">Agregar producto</string>
+    <string name="hint_product_code">Código producto</string>
+    <string name="hint_product_name">Nombre artículo</string>
+    <string name="hint_price">Precio</string>
+    <string name="hint_quantity">Cantidad</string>
+    <string name="btn_save">Guardar</string>
+
+    <!-- Detail -->
+    <string name="detail_title">Detalle del producto</string>
+    <string name="label_unit_price">Precio Unitario:</string>
+    <string name="label_quantity">Cantidad Disponible:</string>
+    <string name="label_total">Total:</string>
+    <string name="btn_delete">Eliminar</string>
+    <string name="dialog_delete_title">Eliminar producto</string>
+    <string name="dialog_delete_message">¿Está seguro que desea eliminar este producto?</string>
+    <string name="dialog_yes">Sí</string>
+    <string name="dialog_no">No</string>
+
+    <!-- Edit -->
+    <string name="edit_title">Editar producto</string>
+    <string name="btn_edit">Editar</string>
+
+    <!-- Widget -->
+    <string name="widget_question">¿Cuánto tengo de\ninventario?</string>
+    <string name="widget_manage">Gestionar inventario</string>
 </resources>
