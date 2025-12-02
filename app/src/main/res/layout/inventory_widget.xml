@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_root"
@@ -107,3 +108,45 @@
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
+=======
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#FFFFFF"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/widget_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:gravity="center"
+        android:paddingBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/widget_total_products"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Total productos: 0"
+        android:textSize="14sp"
+        android:textColor="#666666"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/widget_total_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Valor total: $0"
+        android:textSize="14sp"
+        android:textColor="#666666"
+        android:gravity="center"
+        android:paddingTop="4dp"/>
+
+</LinearLayout>
+>>>>>>> 126dc84 (Unit tests implemented and repository fixes)

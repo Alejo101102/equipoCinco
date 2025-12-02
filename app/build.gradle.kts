@@ -5,6 +5,7 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.gms.google-services")
     id("com.google.dagger.hilt.android")
+    id("jacoco") // ✅ Para cobertura
 }
 
 android {
@@ -22,6 +23,9 @@ android {
     }
 
     buildTypes {
+        debug {
+            enableUnitTestCoverage = true // ✅ Habilitar cobertura
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -43,6 +47,12 @@ android {
     buildFeatures {
         viewBinding = true
         dataBinding = true
+    }
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+            isReturnDefaultValues = true
+        }
     }
 }
 
@@ -90,4 +100,67 @@ dependencies {
 
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    // ✅ Testing - JUnit
+    testImplementation("junit:junit:4.13.2")
+
+    // ✅ Testing - Mockito
+    testImplementation("org.mockito:mockito-core:5.7.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.1.0")
+    testImplementation("org.mockito:mockito-inline:5.2.0")
+
+    // ✅ Testing - Coroutines
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+
+    // ✅ Testing - AndroidX
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+
+    // ✅ Testing - Turbine para Flows
+    testImplementation("app.cash.turbine:turbine:1.0.0")
+
+    // ✅ Testing - Hilt
+    testImplementation("com.google.dagger:hilt-android-testing:2.51.1")
+    kspTest("com.google.dagger:hilt-compiler:2.51.1")
+}
+
+// Configuración simplificada de JaCoCo
+tasks.withType<Test> {
+    configure<JacocoTaskExtension> {
+        isIncludeNoLocationClasses = true
+        excludes = listOf("jdk.internal.*")
+    }
+}
+
+tasks.register<JacocoReport>("jacocoTestReport") {
+    dependsOn("testDebugUnitTest")
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        html.outputLocation.set(layout.buildDirectory.dir("reports/jacoco/jacocoTestReport"))
+    }
+
+    val fileFilter = listOf(
+        "**/R.class",
+        "**/R\$*.class",
+        "**/BuildConfig.*",
+        "**/Manifest*.*",
+        "**/*Test*.*",
+        "android/**/*.*"
+    )
+
+    val mainSrc = "${project.projectDir}/src/main/java"
+
+    sourceDirectories.setFrom(files(mainSrc))
+    classDirectories.setFrom(files(
+        fileTree(layout.buildDirectory.dir("intermediates/javac/debug")) {
+            exclude(fileFilter)
+        },
+        fileTree(layout.buildDirectory.dir("tmp/kotlin-classes/debug")) {
+            exclude(fileFilter)
+        }
+    ))
+
+    executionData.setFrom(files(
+        layout.buildDirectory.file("jacoco/testDebugUnitTest.exec")
+    ))
 }

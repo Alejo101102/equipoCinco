@@ -76,9 +76,9 @@ class HomeFragment : Fragment() {
 
     private fun setupRecyclerView() {
         productAdapter = ProductAdapter { product ->
-            val action = HomeFragmentDirections
-                .actionHomeFragmentToProductDetailFragment(product.id)
-            findNavController().navigate(action)
+//            val action = HomeFragmentDirections
+//                .actionHomeFragmentToProductDetailFragment(product.id)
+//            findNavController().navigate(action)
         }
 
         binding.rvProducts.apply {
