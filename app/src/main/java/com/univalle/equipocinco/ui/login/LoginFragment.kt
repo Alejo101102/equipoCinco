@@ -124,7 +124,33 @@ class LoginFragment : Fragment() {
             if (result.isSuccess) {
                 sessionManager.setLoggedIn(true)
                 Toast.makeText(requireContext(), "Login exitoso", Toast.LENGTH_SHORT).show()
-                navigateToHome()
+
+                val fromWidget = requireActivity()
+                    .intent
+                    .getBooleanExtra("fromWidget", false)
+
+                val goHomeAfterLogin = requireActivity()
+                    .intent
+                    .getBooleanExtra("goHomeAfterLogin", false)
+
+                when {
+                    fromWidget -> {
+                        // Caso: vino del OJO → volver al widget
+                        requireActivity().finish()
+                    }
+
+                    goHomeAfterLogin -> {
+                        // Caso: vino desde GESTIONAR INVENTARIO → ir al Home
+                        findNavController().navigate(R.id.homeFragment)
+                    }
+
+                    else -> {
+                        // Caso: login normal desde la app
+                        navigateToHome()
+                    }
+                }
+
+                return@launch
             } else {
                 binding.btnLogin.isEnabled = true
                 Toast.makeText(requireContext(), "Login incorrecto", Toast.LENGTH_SHORT).show()
@@ -144,7 +170,33 @@ class LoginFragment : Fragment() {
             if (result.isSuccess) {
                 sessionManager.setLoggedIn(true)
                 Toast.makeText(requireContext(), "Registro exitoso", Toast.LENGTH_SHORT).show()
-                navigateToHome()
+
+                val fromWidget = requireActivity()
+                    .intent
+                    .getBooleanExtra("fromWidget", false)
+
+                val goHomeAfterLogin = requireActivity()
+                    .intent
+                    .getBooleanExtra("goHomeAfterLogin", false)
+
+                when {
+                    fromWidget -> {
+                        // Caso: vino del OJO → volver al widget
+                        requireActivity().finish()
+                    }
+
+                    goHomeAfterLogin -> {
+                        // Caso: vino desde GESTIONAR INVENTARIO → ir al Home
+                        findNavController().navigate(R.id.homeFragment)
+                    }
+
+                    else -> {
+                        // Caso: registro normal desde la app
+                        navigateToHome()
+                    }
+                }
+
+                return@launch
             } else {
                 binding.tvRegister.isEnabled = true
                 Toast.makeText(requireContext(), "Error en el registro", Toast.LENGTH_SHORT).show()
